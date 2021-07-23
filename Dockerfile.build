@@ -20,6 +20,7 @@ WORKDIR /work/src
 
 RUN npm install -g nan
 RUN npm install && \
+    ./node_modules/.bin/lerna bootstrap && \
     npm run prebuild
 
 
