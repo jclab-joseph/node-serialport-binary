@@ -25,7 +25,7 @@ RUN npm install -g nan node-gyp
 RUN npm install && \
     node-gyp rebuild --target=v${NODE_VERSION}
 
-RUN name=$(node -e 'console.log("bindings-v" + require("./package.json").version + "-node-v" + ${NODE_MODULE_VERSION} + "-linux-${TARGET_PLATFORM_NAME}")') && \
+RUN name=$(node -e 'console.log(`bindings-v${require("./package.json").version}-node-v${process.env.NODE_MODULE_VERSION}-linux-${process.env.TARGET_PLATFORM_NAME}`)') && \
     mkdir -p /tmp/out && \
     cp build/Release/bindings.node /tmp/out/${name}
 
