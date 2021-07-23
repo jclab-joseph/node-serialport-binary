@@ -18,10 +18,10 @@ jobs:
         run: |
           mkdir -p output
           docker buildx build --progress plain -f Dockerfile.build \
-          --platform $matrix.config.dockerPlatform \
+          --platform ${{matrix.config.dockerPlatform}} \
           --load \
           --output type=local,dest=output \
-          -t build:$matrix.config.dockerPlatform .
+          -t build:${{matrix.config.dockerPlatform}} .
           ls -al output
       # - name: Build
       #  uses: docker/build-push-action@v2
