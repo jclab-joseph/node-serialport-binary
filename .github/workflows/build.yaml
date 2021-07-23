@@ -9,7 +9,7 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - { dockerPlatform: "linux/arm/v7" }
+          - { name: 'armv7', dockerPlatform: 'linux/arm/v7' }
     steps:
       - uses: actions/checkout@v2
       - name: Set up Docker Buildx
@@ -20,7 +20,7 @@ jobs:
           docker buildx build --progress plain -f Dockerfile.build \
           --platform ${{matrix.config.dockerPlatform}} \
           --output type=local,dest=output \
-          -t build:${{matrix.config.dockerPlatform}} .
+          -t build:${{matrix.config.name}} .
           ls -al output
       # - name: Build
       #  uses: docker/build-push-action@v2
