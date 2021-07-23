@@ -1,6 +1,10 @@
 FROM ubuntu:20.04
 ARG DEBIAN_FRONTEND=noninteractive
 
+RUN ln -s /usr/bin/dpkg-split /usr/sbin/dpkg-split && \
+    ln -s /usr/bin/dpkg-deb /usr/sbin/dpkg-deb && \
+    ln -s /bin/tar /usr/sbin/tar
+
 RUN uname -a && \
     apt-get update && \
     apt-get install -y \
