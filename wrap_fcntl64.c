@@ -6,7 +6,9 @@
 #include <fcntl.h>
 #include <unistd.h>
 
+#if defined(__i386__) || defined(__x86_64__)
 asm (".symver fcntl64, fcntl@GLIBC_2.2.5");
+#endif
 
 int __wrap_fcntl64(int fd, int cmd, ...)
 {
