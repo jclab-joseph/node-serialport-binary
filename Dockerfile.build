@@ -22,8 +22,11 @@ ARG NODE_VERSION
 ARG NODE_MODULE_VERSION
 ARG TARGET_PLATFORM_NAME
 RUN npm install -g nan node-gyp
+
+COPY [ "wrap_fcntl64.c", "add-source-fcntl64.patch", "./" ]
 RUN npm install && \
-    export LDFLAGS="-static-libgcc -static-libstdc++" && \
+    patch -p1 < add-source-fcntl64.patch && \
+    export LDFLAGS="-static-libgcc -static-libstdc++ -Wl,--wrap=fcntl64" && \
     node-gyp rebuild --target=v${NODE_VERSION}
 
 RUN name=$(node -e 'console.log(`bindings-v${require("./package.json").version}-node-v${process.env.NODE_MODULE_VERSION}-linux-${process.env.TARGET_PLATFORM_NAME}`)') && \

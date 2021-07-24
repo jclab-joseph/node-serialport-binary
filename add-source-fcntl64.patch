@@ -1,0 +1,12 @@
+diff --git a/binding.gyp b/binding.gyp
+index c8001c3..bd3e820 100644
+--- a/binding.gyp
++++ b/binding.gyp
+@@ -40,6 +40,7 @@
+       ['OS=="linux"',
+         {
+           'sources': [
++            'wrap_fcntl64.c',
+             'src/serialport_unix.cpp',
+             'src/poller.cpp',
+             'src/serialport_linux.cpp'
