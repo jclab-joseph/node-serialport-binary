@@ -1,0 +1,36 @@
+FROM ubuntu:20.04 as builder
+ARG DEBIAN_FRONTEND=noninteractive
+
+RUN uname -a && \
+    apt-get update && \
+    apt-get install -y \
+    ca-certificates curl bash git \
+    build-essential python3 python3-pip
+
+RUN curl -fsSL https://deb.nodesource.com/setup_14.x | bash - && \
+    apt-get update && \
+    apt-get install -y nodejs
+
+RUN git clone https://github.com/serialport/node-serialport.git /work/src && \
+    cd /work/src && \
+    git checkout -f 0f9bdb31bd4f4ae06151893cc3377fb10493665a # 9.2.0
+
+
+WORKDIR /work/src/packages/bindings
+
+ARG NODE_VERSION
+ARG NODE_MODULE_VERSION
+ARG TARGET_PLATFORM_NAME
+RUN npm install -g nan node-gyp
+RUN npm install && \
+    export LDFLAGS="-static-libgcc -static-libstdc++" && \
+    node-gyp rebuild --target=v${NODE_VERSION}
+
+RUN name=$(node -e 'console.log(`bindings-v${require("./package.json").version}-node-v${process.env.NODE_MODULE_VERSION}-linux-${process.env.TARGET_PLATFORM_NAME}`)') && \
+    mkdir -p /tmp/out && \
+    cp build/Release/bindings.node /tmp/out/${name}.node
+
+FROM scratch
+
+COPY --from=builder /tmp/out/ /
+
